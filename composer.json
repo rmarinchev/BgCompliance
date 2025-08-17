@@ -1,7 +1,7 @@
 {
   "name": "rmarinchev/bgcompliance",
   "description": "Bulgarian compliance module for Invoice Ninja v5",
-  "type": "library",
+  "type": "laravel-module",
   "license": "MIT",
   "authors": [
     {
