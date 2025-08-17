@@ -3,6 +3,7 @@
 namespace Modules\BgCompliance\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Factory;
 
 class BgComplianceServiceProvider extends ServiceProvider
 {
@@ -21,8 +22,9 @@ class BgComplianceServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerConfig();
-        $this->registerTranslations();
         $this->registerViews();
+        $this->registerFactories();
+        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
     /**
@@ -32,7 +34,7 @@ class BgComplianceServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->register(RouteServiceProvider::class);
     }
 
     /**
@@ -57,7 +59,7 @@ class BgComplianceServiceProvider extends ServiceProvider
      */
     public function registerViews()
     {
-        $viewPath = base_path('resources/views/modules/bgcompliance');
+        $viewPath = resource_path('views/modules/bgcompliance');
 
         $sourcePath = __DIR__.'/../Resources/views';
 
@@ -71,18 +73,14 @@ class BgComplianceServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register translations.
-     *
+     * Register an additional directory of factories.
+     * 
      * @return void
      */
-    public function registerTranslations()
+    public function registerFactories()
     {
-        $langPath = base_path('resources/lang/modules/bgcompliance');
-
-        if (is_dir($langPath)) {
-            $this->loadTranslationsFrom($langPath, 'bgcompliance');
-        } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'bgcompliance');
+        if (! app()->environment('production')) {
+            app(Factory::class)->load(__DIR__ . '/../Database/factories');
         }
     }
 
