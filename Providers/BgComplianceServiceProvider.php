@@ -3,17 +3,10 @@
 namespace Modules\BgCompliance\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory;
+use Modules\BgCompliance\Twig\BgComplianceExtension;
 
 class BgComplianceServiceProvider extends ServiceProvider
 {
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
     /**
      * Boot the application events.
      *
@@ -21,33 +14,15 @@ class BgComplianceServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerConfig();
-        $this->registerViews();
-        $this->registerFactories();
-        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+        // Register Twig extension
+        $this->registerTwigExtension();
         
-        // Register the transformer binding after the app has booted
-        $this->app->bind(
-            \App\Transformers\InvoiceTransformer::class,
-            \Modules\BgCompliance\Transformers\InvoiceTransformerWithWords::class
-        );
-        
-        // Register Twig extension for templates
-        if ($this->app->bound('twig')) {
-            $twig = $this->app['twig'];
-            $twig->addExtension(new \Modules\BgCompliance\Extensions\BulgarianWordsExtension());
+        // Add macro to Invoice model if it exists
+        if (class_exists('App\Models\Invoice')) {
+            \App\Models\Invoice::macro('getAmountInTextAttribute', function () {
+                return 'works';
+            });
         }
-        
-        // Register event listeners for invoice events (fallback)
-        if (class_exists('\App\Events\Invoice\InvoiceWasViewed')) {
-            $this->app['events']->listen(
-                [\App\Events\Invoice\InvoiceWasViewed::class, \App\Events\Invoice\InvoiceWasEmailed::class],
-                \Modules\BgCompliance\Listeners\InvoiceEventListener::class
-            );
-        }
-        
-        // Log that our service provider is being loaded
-        \Log::info('BgCompliance: Service provider booted with Twig extension');
     }
 
     /**
@@ -57,69 +32,18 @@ class BgComplianceServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Bind the custom transformer to replace the default one
-        $this->app->bind(
-            \App\Transformers\InvoiceTransformer::class,
-            \Modules\BgCompliance\Transformers\InvoiceTransformerWithWords::class
-        );
-        
-        $this->app->register(RouteServiceProvider::class);
+        //
     }
 
     /**
-     * Register config.
-     *
-     * @return void
+     * Register the Twig extension
      */
-    protected function registerConfig()
+    protected function registerTwigExtension()
     {
-        $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('bgcompliance.php'),
-        ], 'config');
-        $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'bgcompliance'
-        );
-    }
-
-    /**
-     * Register views.
-     *
-     * @return void
-     */
-    public function registerViews()
-    {
-        $viewPath = resource_path('views/modules/bgcompliance');
-
-        $sourcePath = __DIR__.'/../Resources/views';
-
-        $this->publishes([
-            $sourcePath => $viewPath
-        ]);
-
-        $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/bgcompliance';
-        }, \Config::get('view.paths')), [$sourcePath]), 'bgcompliance');
-    }
-
-    /**
-     * Register an additional directory of factories.
-     * 
-     * @return void
-     */
-    public function registerFactories()
-    {
-        if (! app()->environment('production')) {
-            app(Factory::class)->load(__DIR__ . '/../Database/factories');
+        if (class_exists('Twig\Environment')) {
+            $this->app->singleton('twig.extension.bgcompliance', function () {
+                return new BgComplianceExtension();
+            });
         }
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [];
     }
 }

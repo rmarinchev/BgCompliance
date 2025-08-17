@@ -13,7 +13,7 @@ Example: Словом: сто двадесет и пет лева и триде�
 ## Features
 
 - ✅ Automatically converts invoice total into Bulgarian words
-- ✅ Works with BGN by default, with simple fallbacks for other currencies
+- ✅ Works with BGN
 - ✅ No database changes required
 - ✅ Upgrade-safe (lives entirely in a Laravel module)
 - ✅ Published under the MIT License (open source)
@@ -47,61 +47,6 @@ php artisan module:enable BgCompliance
 sudo -u www-data php artisan optimize:clear
 ```
 
-### 3. Usage in Templates
-
-Add the Bulgarian amount in words to your invoice templates using the custom Twig function:
-
-**Method 1: Using the custom Twig function (recommended)**
-```html
-<ninja>
-{% set invoice = invoices|first %}
-<p><strong>Total:</strong> {{ invoice.amount | currency }}</p>
-<p><em>{{ bg_amount_words(invoice.amount) }}</em></p>
-</ninja>
-```
-
-**Method 2: Using the Twig filter**
-```html
-<ninja>
-{% set invoice = invoices|first %}
-<p><strong>Total:</strong> {{ invoice.amount | currency }}</p>
-<p><em>{{ invoice.amount | bg_amount_words }}</em></p>
-</ninja>
-```
-
-**Method 3: With custom currency**
-```html
-<ninja>
-{% set invoice = invoices|first %}
-<p><em>{{ bg_amount_words(invoice.amount, 'EUR') }}</em></p>
-</ninja>
-```
-
-### 4. Debugging
-
-To verify the module is working:
-
-1. **Test the module status:**
-
-```bash
-curl http://your-domain/bgcompliance/debug
-curl http://your-domain/bgcompliance/test-binding
-```
-
-2. **Check Laravel logs:**
-
-```bash
-tail -f /var/www/html/storage/logs/laravel.log
-```
-
-3. **Test template variables:**
-```html
-<ninja>
-    {% set invoice = invoices|first %}
-    <!-- Debug all available properties -->
-    <p>{{ invoice|keys|join(', ') }}</p>
-</ninja>
-```
 
 ### 2. Update the module
 
@@ -125,3 +70,21 @@ cd /var/www/html
 sudo -u www-data composer dump-autoload
 sudo -u www-data php artisan optimize:clear
 ```
+
+
+### 3. Usage in Templates
+
+Add the Bulgarian amount in words to your invoice templates using either of these methods:
+
+#### Method 1: Using the Twig function
+```twig
+{{ amount_in_text(invoice) }}
+```
+
+#### Method 2: Using the invoice property (if available)
+```twig
+{{ invoice.amount_in_text }}
+```
+
+Both methods will return the hardcoded string 'works' for now, which can be extended later to convert the actual invoice amount to Bulgarian words.
+
