@@ -25,6 +25,15 @@ class BgComplianceServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->registerFactories();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+        
+        // Register the transformer binding after the app has booted
+        $this->app->bind(
+            \App\Transformers\InvoiceTransformer::class,
+            \Modules\BgCompliance\Transformers\InvoiceTransformerWithWords::class
+        );
+        
+        // Log that our service provider is being loaded
+        \Log::info('BgCompliance: Service provider booted and transformer bound');
     }
 
     /**

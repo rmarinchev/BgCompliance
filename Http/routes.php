@@ -22,4 +22,14 @@ Route::group(['middleware' => ['web'], 'prefix' => 'bgcompliance', 'namespace' =
             'test_conversion' => \Modules\BgCompliance\Services\BulgarianNumberToWords::convert(125),
         ]);
     });
+
+    // Test transformer binding
+    Route::get('/test-binding', function () {
+        $transformer = app(\App\Transformers\InvoiceTransformer::class);
+        return response()->json([
+            'bound_class' => get_class($transformer),
+            'is_custom' => $transformer instanceof \Modules\BgCompliance\Transformers\InvoiceTransformerWithWords,
+            'expected_class' => \Modules\BgCompliance\Transformers\InvoiceTransformerWithWords::class,
+        ]);
+    });
 });
