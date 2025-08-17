@@ -1,25 +1,30 @@
 {
-    "name": "bgcompliance/bgcompliance",
-    "description": "Bulgarian compliance module for Invoice Ninja",
+    "name": "rmarinchev/bgcompliance",
+    "description": "Bulgarian compliance module for Invoice Ninja v5 - adds amount in Bulgarian words to invoice templates",
     "authors": [
         {
-            "name": "Perspecta Ltd.",
-            "email": "info@perspecta.bg"
+            "name": "Rosen Marinchev",
+            "email": "rmarinchev@perspecta-soft.com"
         }
     ],
     "extra": {
         "laravel": {
-            "providers": [
-                "Modules\\BgCompliance\\Providers\\BgComplianceServiceProvider"
-            ],
+            "providers": [],
             "aliases": {
-                
+
             }
         }
     },
     "autoload": {
         "psr-4": {
-            "Modules\\BgCompliance\\": ""
+            "Modules\\BgCompliance\\": "app/",
+            "Modules\\BgCompliance\\Database\\Factories\\": "database/factories/",
+            "Modules\\BgCompliance\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\BgCompliance\\Tests\\": "tests/"
         }
     }
 }
