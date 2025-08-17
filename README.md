@@ -41,11 +41,11 @@ find /var/www/html/Modules -type f -exec chmod 644 {} \;
 
 # Navigate to Invoice Ninja directory and refresh autoloader first
 cd /var/www/html
-composer dump-autoload
+sudo -u www-data composer dump-autoload
 
 # Enable the module
 php artisan module:enable BgCompliance
-php artisan optimize:clear
+sudo -u www-data php artisan optimize:clear
 ```
 
 ### 2. Update the module
@@ -56,11 +56,14 @@ To update the module to the latest version:
 # Navigate to the module directory
 cd /var/www/html/Modules/BgCompliance
 
+# Fix Git ownership issue (if you get "dubious ownership" error)
+git config --global --add safe.directory /var/www/html/Modules/BgCompliance
+
 # Pull the latest changes
 git pull origin main
 
 # Navigate back to Invoice Ninja root and refresh
 cd /var/www/html
-composer dump-autoload
-php artisan optimize:clear
+sudo -u www-data composer dump-autoload
+sudo -u www-data php artisan optimize:clear
 ```
