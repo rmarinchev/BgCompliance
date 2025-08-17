@@ -1,13 +1,27 @@
 {
   "name": "rmarinchev/bgcompliance",
-  "description": "Bulgarian compliance module for Invoice Ninja",
-  "type": "laravel-module",
+  "description": "Bulgarian compliance module for Invoice Ninja v5",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Rosen Marinchev",
+      "email": "rmarinchev@perspecta-soft.com"
+    }
+  ],
+  "require": {
+    "php": "^8.0"
+  },
   "autoload": {
     "psr-4": {
       "Modules\\BgCompliance\\": ""
     }
   },
-  "require": {
-    "kwn/number-to-words": "^1.7"
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Modules\\BgCompliance\\Providers\\BgComplianceServiceProvider"
+      ]
+    }
   }
 }

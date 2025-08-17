@@ -1,11 +1,18 @@
 {
   "name": "BgCompliance",
   "alias": "bgcompliance",
-  "description": "Bulgarian compliance module: adds invoice.amount_in_text (словом).",
-  "keywords": ["invoice-ninja", "bulgaria", "словом", "amount-in-text"],
+  "description": "Bulgarian compliance module for Invoice Ninja v5 - adds amount in Bulgarian words to invoice templates",
+  "keywords": [
+    "invoice-ninja",
+    "bulgarian",
+    "compliance",
+    "invoicing"
+  ],
   "priority": 0,
   "providers": [
     "Modules\\BgCompliance\\Providers\\BgComplianceServiceProvider"
   ],
-  "files": []
+  "aliases": {},
+  "files": [],
+  "requires": []
 }

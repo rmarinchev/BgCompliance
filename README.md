@@ -23,11 +23,12 @@ Example: Словом: сто двадесет и пет лева и триде�
 
 ## Installation
 
-### 1. Install the module from GitHub
+### 1. Install the module automatically from GitHub
 
 From your Invoice Ninja root directory:
 
 ```bash
-php artisan module:install rmarinchev/bgcompliance --type=github --branch=main
+php artisan module:install rmarinchev/bgcompliance dev-main --type=github
 composer dump-autoload
 php artisan optimize:clear
+```

@@ -3,19 +3,22 @@
 namespace Modules\BgCompliance\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Transformers\InvoiceTransformer;
-use Modules\BgCompliance\Transformers\InvoiceTransformerWithWords;
 
 class BgComplianceServiceProvider extends ServiceProvider
 {
-    public function register(): void
+    /**
+     * Boot the application events.
+     */
+    public function boot()
     {
-        // Replace the default invoice transformer with our custom one
-        $this->app->bind(InvoiceTransformer::class, InvoiceTransformerWithWords::class);
+        // Module boot logic here
     }
 
-    public function boot(): void
+    /**
+     * Register the service provider.
+     */
+    public function register()
     {
-        // Nothing else required for now
+        // Module registration logic here
     }
 }
