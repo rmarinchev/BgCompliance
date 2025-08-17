@@ -8,15 +8,14 @@ It adds a new runtime variable to invoice templates:
 
 Example: Словом: сто двадесет и пет лева и тридесет стотинки
 
-
 ---
 
 ## Features
 
-- ✅ Automatically converts invoice total into Bulgarian words  
-- ✅ Works with BGN by default, with simple fallbacks for other currencies  
-- ✅ No database changes required  
-- ✅ Upgrade-safe (lives entirely in a Laravel module)  
+- ✅ Automatically converts invoice total into Bulgarian words
+- ✅ Works with BGN by default, with simple fallbacks for other currencies
+- ✅ No database changes required
+- ✅ Upgrade-safe (lives entirely in a Laravel module)
 - ✅ Published under the MIT License (open source)
 
 ---
@@ -50,13 +49,31 @@ sudo -u www-data php artisan optimize:clear
 
 ### 3. Usage in Templates
 
-Add the Bulgarian amount in words to your invoice templates:
+Add the Bulgarian amount in words to your invoice templates using the custom Twig function:
 
+**Method 1: Using the custom Twig function (recommended)**
 ```html
 <ninja>
 {% set invoice = invoices|first %}
 <p><strong>Total:</strong> {{ invoice.amount | currency }}</p>
-<p><em>{{ invoice.amount_in_text|default('Словом: не е намерено') }}</em></p>
+<p><em>{{ bg_amount_words(invoice.amount) }}</em></p>
+</ninja>
+```
+
+**Method 2: Using the Twig filter**
+```html
+<ninja>
+{% set invoice = invoices|first %}
+<p><strong>Total:</strong> {{ invoice.amount | currency }}</p>
+<p><em>{{ invoice.amount | bg_amount_words }}</em></p>
+</ninja>
+```
+
+**Method 3: With custom currency**
+```html
+<ninja>
+{% set invoice = invoices|first %}
+<p><em>{{ bg_amount_words(invoice.amount, 'EUR') }}</em></p>
 </ninja>
 ```
 
@@ -65,27 +82,25 @@ Add the Bulgarian amount in words to your invoice templates:
 To verify the module is working:
 
 1. **Test the module status:**
-   ```bash
-   curl http://your-domain/bgcompliance/debug
-   curl http://your-domain/bgcompliance/test-binding
-   ```
+
+```bash
+curl http://your-domain/bgcompliance/debug
+curl http://your-domain/bgcompliance/test-binding
+```
 
 2. **Check Laravel logs:**
-   ```bash
-   tail -f /var/www/html/storage/logs/laravel.log
-   ```
+
+```bash
+tail -f /var/www/html/storage/logs/laravel.log
+```
 
 3. **Test template variables:**
-   ```html
-   <ninja>
-   {% set invoice = invoices|first %}
-   <!-- Debug all available properties -->
-   <details>
-       <summary>Available Invoice Properties</summary>
-       <pre>{{ invoice|keys|join(', ') }}</pre>
-   </details>
-   </ninja>
-   ```
+```html
+<ninja>
+    {% set invoice = invoices|first %}
+    <!-- Debug all available properties -->
+    <p>{{ invoice|keys|join(', ') }}</p>
+</ninja>
 ```
 
 ### 2. Update the module

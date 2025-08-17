@@ -32,14 +32,22 @@ class BgComplianceServiceProvider extends ServiceProvider
             \Modules\BgCompliance\Transformers\InvoiceTransformerWithWords::class
         );
         
-        // Register event listeners for invoice events
-        $this->app['events']->listen(
-            [\App\Events\Invoice\InvoiceWasViewed::class, \App\Events\Invoice\InvoiceWasEmailed::class],
-            \Modules\BgCompliance\Listeners\InvoiceEventListener::class
-        );
+        // Register Twig extension for templates
+        if ($this->app->bound('twig')) {
+            $twig = $this->app['twig'];
+            $twig->addExtension(new \Modules\BgCompliance\Extensions\BulgarianWordsExtension());
+        }
+        
+        // Register event listeners for invoice events (fallback)
+        if (class_exists('\App\Events\Invoice\InvoiceWasViewed')) {
+            $this->app['events']->listen(
+                [\App\Events\Invoice\InvoiceWasViewed::class, \App\Events\Invoice\InvoiceWasEmailed::class],
+                \Modules\BgCompliance\Listeners\InvoiceEventListener::class
+            );
+        }
         
         // Log that our service provider is being loaded
-        \Log::info('BgCompliance: Service provider booted, transformer bound, and events registered');
+        \Log::info('BgCompliance: Service provider booted with Twig extension');
     }
 
     /**
