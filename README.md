@@ -62,6 +62,9 @@ git config --global --add safe.directory /var/www/html/Modules/BgCompliance
 # Pull the latest changes
 git pull origin main
 
+find /var/www/html/Modules -type d -exec chmod 755 {} \;
+find /var/www/html/Modules -type f -exec chmod 644 {} \;
+
 # Navigate back to Invoice Ninja root and refresh
 cd /var/www/html
 sudo -u www-data composer dump-autoload

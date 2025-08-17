@@ -18,7 +18,8 @@ Route::group(['middleware' => ['web'], 'prefix' => 'bgcompliance', 'namespace' =
             'message' => 'BgCompliance module is loaded and working!',
             'timestamp' => now(),
             'test_transformer' => class_exists('\Modules\BgCompliance\Transformers\InvoiceTransformerWithWords'),
-            'test_number_to_words' => class_exists('\Kwn\NumberToWords\NumberToWords'),
+            'test_bulgarian_converter' => class_exists('\Modules\BgCompliance\Services\BulgarianNumberToWords'),
+            'test_conversion' => \Modules\BgCompliance\Services\BulgarianNumberToWords::convert(125),
         ]);
     });
 });
