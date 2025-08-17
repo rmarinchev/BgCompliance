@@ -1,0 +1,13 @@
+{
+  "name": "rmarinchev/bgcompliance",
+  "description": "Bulgarian compliance module for Invoice Ninja",
+  "type": "laravel-module",
+  "autoload": {
+    "psr-4": {
+      "Modules\\BgCompliance\\": ""
+    }
+  },
+  "require": {
+    "kwn/number-to-words": "^1.7"
+  }
+}
