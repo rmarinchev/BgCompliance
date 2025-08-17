@@ -32,8 +32,14 @@ class BgComplianceServiceProvider extends ServiceProvider
             \Modules\BgCompliance\Transformers\InvoiceTransformerWithWords::class
         );
         
+        // Register event listeners for invoice events
+        $this->app['events']->listen(
+            [\App\Events\Invoice\InvoiceWasViewed::class, \App\Events\Invoice\InvoiceWasEmailed::class],
+            \Modules\BgCompliance\Listeners\InvoiceEventListener::class
+        );
+        
         // Log that our service provider is being loaded
-        \Log::info('BgCompliance: Service provider booted and transformer bound');
+        \Log::info('BgCompliance: Service provider booted, transformer bound, and events registered');
     }
 
     /**

@@ -48,6 +48,46 @@ php artisan module:enable BgCompliance
 sudo -u www-data php artisan optimize:clear
 ```
 
+### 3. Usage in Templates
+
+Add the Bulgarian amount in words to your invoice templates:
+
+```html
+<ninja>
+{% set invoice = invoices|first %}
+<p><strong>Total:</strong> {{ invoice.amount | currency }}</p>
+<p><em>{{ invoice.amount_in_text|default('Словом: не е намерено') }}</em></p>
+</ninja>
+```
+
+### 4. Debugging
+
+To verify the module is working:
+
+1. **Test the module status:**
+   ```bash
+   curl http://your-domain/bgcompliance/debug
+   curl http://your-domain/bgcompliance/test-binding
+   ```
+
+2. **Check Laravel logs:**
+   ```bash
+   tail -f /var/www/html/storage/logs/laravel.log
+   ```
+
+3. **Test template variables:**
+   ```html
+   <ninja>
+   {% set invoice = invoices|first %}
+   <!-- Debug all available properties -->
+   <details>
+       <summary>Available Invoice Properties</summary>
+       <pre>{{ invoice|keys|join(', ') }}</pre>
+   </details>
+   </ninja>
+   ```
+```
+
 ### 2. Update the module
 
 To update the module to the latest version:
