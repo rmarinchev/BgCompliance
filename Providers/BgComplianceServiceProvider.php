@@ -34,6 +34,12 @@ class BgComplianceServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // Bind the custom transformer to replace the default one
+        $this->app->bind(
+            \App\Transformers\InvoiceTransformer::class,
+            \Modules\BgCompliance\Transformers\InvoiceTransformerWithWords::class
+        );
+        
         $this->app->register(RouteServiceProvider::class);
     }
 

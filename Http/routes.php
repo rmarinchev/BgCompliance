@@ -12,5 +12,13 @@
 */
 
 Route::group(['middleware' => ['web'], 'prefix' => 'bgcompliance', 'namespace' => 'Modules\BgCompliance\Http\Controllers'], function () {
-    //
+    // Debug route to test the module
+    Route::get('/debug', function () {
+        return response()->json([
+            'message' => 'BgCompliance module is loaded and working!',
+            'timestamp' => now(),
+            'test_transformer' => class_exists('\Modules\BgCompliance\Transformers\InvoiceTransformerWithWords'),
+            'test_number_to_words' => class_exists('\Kwn\NumberToWords\NumberToWords'),
+        ]);
+    });
 });

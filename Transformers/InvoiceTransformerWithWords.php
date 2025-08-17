@@ -10,6 +10,9 @@ class InvoiceTransformerWithWords extends CoreTransformer
 {
     public function transform(Invoice $invoice): array
     {
+        // Debug: Log that our transformer is being called
+        \Log::info('BgCompliance: Custom transformer called for invoice ID: ' . $invoice->id);
+        
         $data = parent::transform($invoice);
 
         $amount = (float) ($invoice->amount ?? 0.0);
@@ -36,6 +39,9 @@ class InvoiceTransformerWithWords extends CoreTransformer
 
         $amountInText = 'Словом: ' . $levaWords . ' ' . $unit
                       . (((int)$st) ? ' и ' . $stWords . ' ' . $cent : '');
+
+        // Debug: Log the generated text
+        \Log::info('BgCompliance: Generated amount_in_text: ' . $amountInText);
 
         // Expose it for Twig templates
         $data['amount_in_text'] = $amountInText;
